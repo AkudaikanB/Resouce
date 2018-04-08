@@ -1,0 +1,93 @@
+//	アイテムオブジェクトの制御
+
+//	多重定義防止
+#ifndef ITEM_H
+#define ITEM_H
+
+
+//	ファイル結合
+#include "game.h"
+#include "goal.h"
+
+//	マクロ・定数定義
+#define NUM_MaxItem			(NUM_MaxGoal*NUM_ItemToGoal+10)				//	アイテムオブジェクトの管理数
+#define ADR_TextureFruit00	"Data/Graphics/Textures_2D/OBJ_Fruit00.png"	//	アイテムオブジェクトのテクスチャ
+const float INIT_SizItem = 10.0f;		//	アイテムオブジェクトの大きさ（汎用）
+
+//	プロトタイプ宣言
+void InitItems(LPDIRECT3DDEVICE9 pDevice);	//	初期化
+void UninitItems(void);						//	メモリ開放
+void UpdateItems(void);						//	更新
+void DrawItems(LPDIRECT3DDEVICE9 pDevice);	//	描画
+
+int CreateItem(D3DXVECTOR3 pos,float siz);				//	アイテムオブジェクトの生成
+void EraseItem(int Manager);							//	指定されたアイテムオブジェクトを無効化
+int Get_TouchedItem(D3DXVECTOR3 pos, D3DXVECTOR3 siz);	//	アイテムオブジェクトとの接触判定
+
+
+//	固定位置(SurvivalMode)
+const D3DXVECTOR3 POS_SurvivalItems[NUM_MaxItem] = {
+	D3DXVECTOR3(00.0f,100.0f,00.0f),		//	0
+	D3DXVECTOR3(00.0f,100.0f,1000.0f),
+	D3DXVECTOR3(1000.0f,100.0f,1000.0f),
+	D3DXVECTOR3(1000.0f,100.0f,00.0f),
+	D3DXVECTOR3(1000.0f,100.0f,-1000.0f),
+	D3DXVECTOR3(00.0f,100.0f,-1000.0f),		//	5
+	D3DXVECTOR3(-1000.0f,100.0f,-1000.0f),
+	D3DXVECTOR3(-1000.0f,100.0f,00.0f),
+	D3DXVECTOR3(-1000.0f,100.0f,1000.0f),
+	D3DXVECTOR3(1000.0f,100.0f,2000.0f),
+	D3DXVECTOR3(2000.0f,100.0f,2000.0f),		//	100
+	D3DXVECTOR3(2000.0f,100.0f,1000.0f),
+	D3DXVECTOR3(2000.0f,100.0f,00.0f),		//
+	D3DXVECTOR3(2000.0f,100.0f,-1000.0f),
+	D3DXVECTOR3(2000.0f,100.0f,-2000.0f),
+	D3DXVECTOR3(1000.0f,100.0f,-2000.0f),		//	15
+	D3DXVECTOR3(00.0f,100.0f,-2000.0f),
+	D3DXVECTOR3(-1000.0f,100.0f,-2000.0f),	//
+	D3DXVECTOR3(-2000.0f,100.0f,2000.0f),
+	D3DXVECTOR3(-2000.0f,100.0f,1000.0f),
+	D3DXVECTOR3(-2000.0f,100.0f,00.0f),		//	200
+	D3DXVECTOR3(-2000.0f,100.0f,1000.0f),
+	D3DXVECTOR3(-2000.0f,100.0f,2000.0f),		//
+	D3DXVECTOR3(-1000.0f,100.0f,2000.0f),
+	D3DXVECTOR3(00.0f,100.0f,2000.0f),
+	D3DXVECTOR3(2000.0f,100.0f,3000.0f),	//	25
+	D3DXVECTOR3(3000.0f,100.0f,3000.0f),
+	D3DXVECTOR3(3000.0f,100.0f,2000.0f),	//
+	D3DXVECTOR3(3000.0f,100.0f,1000.0f),
+	D3DXVECTOR3(3000.0f,100.0f,00.0f),
+	D3DXVECTOR3(3000.0f,100.0f,1000.0f),	//	300
+	D3DXVECTOR3(3000.0f,100.0f,-2000.0f),
+	D3DXVECTOR3(3000.0f,100.0f,-3000.0f),	//
+	D3DXVECTOR3(2000.0f,100.0f,-3000.0f),
+	D3DXVECTOR3(1000.0f,100.0f,-3000.0f),
+	D3DXVECTOR3(00.0f,100.0f,-3000.0f),	//	35
+	D3DXVECTOR3(-1000.0f,100.0f,-3000.0f),
+	D3DXVECTOR3(-2000.0f,100.0f,-3000.0f),	//
+	D3DXVECTOR3(-3000.0f,100.0f,-3000.0f),
+	D3DXVECTOR3(-3000.0f,100.0f,-2000.0f),
+	D3DXVECTOR3(-3000.0f,100.0f,-1000.0f),	//	40
+	D3DXVECTOR3(-3000.0f,100.0f,00.0f),
+	D3DXVECTOR3(-3000.0f,100.0f,1000.0f),	//
+	D3DXVECTOR3(-3000.0f,100.0f,2000.0f),
+	D3DXVECTOR3(-3000.0f,100.0f,3000.0f),
+	D3DXVECTOR3(-2000.0f,100.0f,3000.0f),	//	45
+	D3DXVECTOR3(-1000.0f,100.0f,3000.0f),
+	D3DXVECTOR3(00.0f,100.0f,3000.0f),	//
+	D3DXVECTOR3(1000.0f,100.0f,3000.0f),
+	D3DXVECTOR3(7500.0f,100.0f,7500.0f),
+	D3DXVECTOR3(7500.0f,100.0f,00.0f),	//	50
+	D3DXVECTOR3(7500.0f,100.0f,-7500.0f),
+	D3DXVECTOR3(00.0f,100.0f,-7500.0f),	//
+	D3DXVECTOR3(-7500.0f,100.0f,-7500.0f),
+	D3DXVECTOR3(-7500.0f,100.0f,00.0f),
+	D3DXVECTOR3(-7500.0f,100.0f,7500.0f),	//	
+	D3DXVECTOR3(00.0f,100.0f,7500.0f),
+	D3DXVECTOR3(10000.0f,100.0f,10000.0f),	//
+	D3DXVECTOR3(-10000.0f,100.0f,-10000.0f),
+	D3DXVECTOR3(00.0f,100.0f,00.0f),	//	59
+};
+
+
+#endif
